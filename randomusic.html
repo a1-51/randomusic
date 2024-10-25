@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>randomusic</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    color: #333;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .slot {
+    font-size: 1.5rem;
+    padding: 15px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    width: 200px;
+    margin: 10px;
+    background-color: #f4f4f4;
+  }
+  #generateButton {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>randomusic</h1>
+<div class="container">
+  <div class="slot" id="bpm">BPM: --</div>
+  <div class="slot" id="timeSignature">拍子: --</div>
+  <div class="slot" id="key">キー: --</div>
+  <div class="slot" id="modulationCount">転調回数: --</div>
+  <div class="slot" id="timeChangeCount">転拍回数: --</div>
+  <button id="generateButton" onclick="generateRandomParameters()">Generate</button>
+</div>
+
+<script>
+  function getRandomExponential(min, max, decayRate = 2) {
+    let range = max - min + 1;
+    let rand = Math.pow(Math.random(), decayRate);
+    return Math.floor(rand * range) + min;
+  }
+
+  function getRandomFromArray(array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+
+  function generateRandomParameters() {
+    // BPM: 1~400 with exponential decay
+    let bpm = getRandomExponential(1, 400);
+
+    // 拍子 - 分母: 1~9 with exponential decay
+    let denominator = getRandomExponential(1, 9);
+    // 拍子 - 分子: 1~100 with exponential decay
+    let numerator = getRandomExponential(1, 100);
+
+    // Key
+    const keys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    let key = getRandomFromArray(keys);
+
+    // 転調回数: 0~100 with exponential decay
+    let modulationCount = getRandomExponential(0, 100);
+
+    // 転拍回数: 0~100 with exponential decay
+    let timeChangeCount = getRandomExponential(0, 100);
+
+    // Update the UI
+    document.getElementById("bpm").textContent = `BPM: ${bpm}`;
+    document.getElementById("timeSignature").textContent = `拍子: ${numerator}/${denominator}`;
+    document.getElementById("key").textContent = `キー: ${key}`;
+    document.getElementById("modulationCount").textContent = `転調回数: ${modulationCount}`;
+    document.getElementById("timeChangeCount").textContent = `転拍回数: ${timeChangeCount}`;
+  }
+</script>
+
+</body>
+</html>
